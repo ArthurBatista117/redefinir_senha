@@ -1,25 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <title>Definir Senha</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L.A.S - Definir Senha</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <h2>Definir Nova Senha</h2>
-  <input type="password" id="password" placeholder="Nova senha">
-  <button onclick="updatePassword()">Salvar</button>
-  
-  <script>
-    const supabase = supabase.createClient('https://arthurbatista117.github.io/redefinir_senha/', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5amppbHBrZ255Ymx4ZWpqamxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDM1ODUsImV4cCI6MjA3NzUxOTU4NX0.qdyztkodkAD1YSe6ixnxnFZU7MYFzLDc2uJO5xNPAd0');
+  <div class="app-bar">
+    <h1>L.A.S</h1>
+  </div>
+
+  <div class="container">
+    <div class="icon-container">
+      <div class="lock-icon">🔒</div>
+    </div>
     
-    async function updatePassword() {
-      const password = document.getElementById('password').value;
-      const { error } = await supabase.auth.updateUser({ password });
-      
-      if (error) alert('Erro: ' + error.message);
-      else alert('Senha atualizada! Você já pode fazer login no app.');
-    }
-  </script>
+    <h2>Definir Nova Senha</h2>
+    <p class="subtitle">Crie uma senha segura para acessar o sistema</p>
+
+    <form id="resetForm">
+      <div class="form-group">
+        <label for="password">Nova Senha</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔑</span>
+          <input 
+            type="password" 
+            id="password" 
+            placeholder="Digite sua nova senha"
+            required
+          >
+        </div>
+        <div class="password-strength">
+          <div class="strength-bar">
+            <div class="strength-fill" id="strengthBar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Senha</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔑</span>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            placeholder="Digite a senha novamente"
+            required
+          >
+        </div>
+      </div>
+
+      <div class="requirements">
+        <p>Requisitos da senha:</p>
+        <ul>
+          <li id="req-length">Mínimo de 6 caracteres</li>
+          <li id="req-match">Senhas coincidem</li>
+        </ul>
+      </div>
+
+      <button type="submit" id="submitBtn">Salvar Nova Senha</button>
+    </form>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p style="margin-top: 8px; color: #666;">Atualizando senha...</p>
+    </div>
+
+    <div class="message" id="message"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

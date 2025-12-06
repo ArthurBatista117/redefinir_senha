@@ -1,0 +1,108 @@
+const SUPABASE_URL = 'SUA_URL_SUPABASE_AQUI';
+const SUPABASE_KEY = 'SUA_CHAVE_PUBLICA_AQUI';
+
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirmPassword');
+const strengthBar = document.getElementById('strengthBar');
+const submitBtn = document.getElementById('submitBtn');
+const form = document.getElementById('resetForm');
+const loading = document.getElementById('loading');
+const message = document.getElementById('message');
+
+// Validação de força da senha
+passwordInput.addEventListener('input', () => {
+    const password = passwordInput.value;
+    const length = password.length;
+
+    strengthBar.className = 'strength-fill';
+
+    if (length === 0) {
+        strengthBar.style.width = '0%';
+    } else if (length < 6) {
+        strengthBar.classList.add('strength-weak');
+    } else if (length < 10) {
+        strengthBar.classList.add('strength-medium');
+    } else {
+        strengthBar.classList.add('strength-strong');
+    }
+
+    updateRequirements();
+});
+
+confirmPasswordInput.addEventListener('input', updateRequirements);
+
+function updateRequirements() {
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Requisito de comprimento
+    const lengthReq = document.getElementById('req-length');
+    if (password.length >= 6) {
+        lengthReq.classList.add('valid');
+    } else {
+        lengthReq.classList.remove('valid');
+    }
+
+    // Requisito de correspondência
+    const matchReq = document.getElementById('req-match');
+    if (password === confirmPassword && password.length > 0) {
+        matchReq.classList.add('valid');
+    } else {
+        matchReq.classList.remove('valid');
+    }
+}
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = `message ${type} active`;
+}
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    // Validações
+    if (password.length < 6) {
+        showMessage('A senha deve ter no mínimo 6 caracteres', 'error');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        showMessage('As senhas não coincidem', 'error');
+        return;
+    }
+
+    // Mostrar loading
+    loading.classList.add('active');
+    submitBtn.disabled = true;
+    message.classList.remove('active');
+
+    try {
+        const { data, error } = await supabaseClient.auth.updateUser({
+            password: password
+        });
+
+        if (error) throw error;
+
+        showMessage('✓ Senha atualizada com sucesso! Você já pode fazer login no aplicativo.', 'success');
+        form.reset();
+        strengthBar.style.width = '0%';
+        updateRequirements();
+
+        // Redirecionar após 3 segundos (opcional)
+        setTimeout(() => {
+            window.close();
+        }, 3000);
+
+    } catch (error) {
+        showMessage('Erro ao atualizar senha: ' + error.message, 'error');
+    } finally {
+        loading.classList.remove('active');
+        submitBtn.disabled = false;
+    }
+});
