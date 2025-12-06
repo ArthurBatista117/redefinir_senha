@@ -1,5 +1,5 @@
-const SUPABASE_URL = 'SUA_URL_SUPABASE_AQUI';
-const SUPABASE_KEY = 'SUA_CHAVE_PUBLICA_AQUI';
+const SUPABASE_URL = 'https://arthurbatista117.github.io/redefinir_senha/';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5amppbHBrZ255Ymx4ZWpqamxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDM1ODUsImV4cCI6MjA3NzUxOTU4NX0.qdyztkodkAD1YSe6ixnxnFZU7MYFzLDc2uJO5xNPAd0';
 
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
