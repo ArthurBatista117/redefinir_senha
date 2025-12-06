@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Definir Senha</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h2>Definir Nova Senha</h2>
+  <input type="password" id="password" placeholder="Nova senha">
+  <button onclick="updatePassword()">Salvar</button>
+  
+  <script>
+    const supabase = supabase.createClient('SUA_URL', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5amppbHBrZ255Ymx4ZWpqamxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDM1ODUsImV4cCI6MjA3NzUxOTU4NX0.qdyztkodkAD1YSe6ixnxnFZU7MYFzLDc2uJO5xNPAd0');
+    
+    async function updatePassword() {
+      const password = document.getElementById('password').value;
+      const { error } = await supabase.auth.updateUser({ password });
+      
+      if (error) alert('Erro: ' + error.message);
+      else alert('Senha atualizada! Você já pode fazer login no app.');
+    }
+  </script>
+</body>
+</html>
