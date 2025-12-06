@@ -4,6 +4,28 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+async function checkSession() {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+
+    if (accessToken) {
+        try {
+            const { data, error } = await supabaseClient.auth.setSession({
+                access_token: accessToken,
+                refresh_token: hashParams.get('refresh_token') || ''
+            });
+
+            if (error) {
+                showMessage('Link inválido ou expirado. Solicite um novo convite.', 'error');
+            }
+        } catch (err) {
+            console.error('Erro ao verificar sessão:', err);
+        }
+    }
+}
+
+checkSession();
+
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirmPassword');
 const strengthBar = document.getElementById('strengthBar');
