@@ -41,17 +41,21 @@ function updateRequirements() {
     // Requisito de comprimento
     const lengthReq = document.getElementById('req-length');
     if (password.length >= 6) {
+        lengthReq.classList.remove('invalid');
         lengthReq.classList.add('valid');
     } else {
         lengthReq.classList.remove('valid');
+        lengthReq.classList.add('invalid');
     }
 
     // Requisito de correspondência
     const matchReq = document.getElementById('req-match');
-    if (password === confirmPassword && password.length > 0) {
+    if (password === confirmPassword && password.length > 0 && confirmPassword.length > 0) {
+        matchReq.classList.remove('invalid');
         matchReq.classList.add('valid');
     } else {
         matchReq.classList.remove('valid');
+        matchReq.classList.add('invalid');
     }
 }
 
