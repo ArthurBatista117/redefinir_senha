@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L.A.S - Definir Senha</title>
-    <link rel="stylesheet" href="style.css">
+    <title>L.A.S - Finalizar Cadastro</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -19,10 +18,26 @@
             <div class="lock-icon">🔒</div>
         </div>
 
-        <h2>Definir Nova Senha</h2>
-        <p class="subtitle">Crie uma senha segura para acessar o sistema</p>
+        <h2>Finalizar Cadastro</h2>
+        <p class="subtitle">Complete seu cadastro para acessar o sistema</p>
 
         <form id="resetForm">
+            <div class="form-group">
+                <label for="name">Nome Completo</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="name" placeholder="Digite seu nome completo" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Telefone</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" id="phone" placeholder="(00) 00000-0000" required>
+                </div>
+            </div>
+
             <div class="form-group">
                 <label for="password">Nova Senha</label>
                 <div class="input-wrapper">
@@ -52,18 +67,18 @@
                 </ul>
             </div>
 
-            <button type="submit" id="submitBtn">Salvar Nova Senha</button>
+            <button type="submit" id="submitBtn">Finalizar Cadastro</button>
         </form>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p style="margin-top: 8px; color: #666;">Atualizando senha...</p>
+            <p style="margin-top: 8px; color: #666;">Finalizando cadastro...</p>
         </div>
 
         <div class="message" id="message"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" ></script>
 </body>
 
 </html>
