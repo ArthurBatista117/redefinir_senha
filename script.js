@@ -1,29 +1,53 @@
-const SUPABASE_URL = 'https://arthurbatista117.github.io/redefinir_senha/';
+const SUPABASE_URL = 'https://uyjjilpkgnyblxejjjlk.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5amppbHBrZ255Ymx4ZWpqamxrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE5NDM1ODUsImV4cCI6MjA3NzUxOTU4NX0.qdyztkodkAD1YSe6ixnxnFZU7MYFzLDc2uJO5xNPAd0';
 
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Verificar se há token na URL (convite/recuperação)
 async function checkSession() {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
+    try {
+        // Tenta pegar o token do hash (#) ou query (?)
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const queryParams = new URLSearchParams(window.location.search);
 
-    if (accessToken) {
-        try {
+        let accessToken = hashParams.get('access_token') || queryParams.get('access_token');
+        let refreshToken = hashParams.get('refresh_token') || queryParams.get('refresh_token');
+        let type = hashParams.get('type') || queryParams.get('type');
+
+        console.log('Tokens encontrados:', { accessToken: !!accessToken, refreshToken: !!refreshToken, type });
+
+        if (accessToken) {
             const { data, error } = await supabaseClient.auth.setSession({
                 access_token: accessToken,
-                refresh_token: hashParams.get('refresh_token') || ''
+                refresh_token: refreshToken || ''
             });
 
             if (error) {
+                console.error('Erro ao definir sessão:', error);
                 showMessage('Link inválido ou expirado. Solicite um novo convite.', 'error');
+            } else {
+                console.log('Sessão definida com sucesso!');
+                showMessage('Link válido! Defina sua nova senha abaixo.', 'success');
             }
-        } catch (err) {
-            console.error('Erro ao verificar sessão:', err);
+        } else {
+            // Verifica se já há uma sessão ativa
+            const { data: { session } } = await supabaseClient.auth.getSession();
+
+            if (!session) {
+                showMessage('Link inválido. Verifique se clicou no link correto do email.', 'error');
+                submitBtn.disabled = true;
+            } else {
+                console.log('Sessão já existe');
+            }
         }
+    } catch (err) {
+        console.error('Erro ao verificar sessão:', err);
+        showMessage('Erro ao processar o link. Tente novamente.', 'error');
     }
 }
 
+// Executar verificação ao carregar a página
 checkSession();
 
 const passwordInput = document.getElementById('password');
