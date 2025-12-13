@@ -225,7 +225,7 @@ form.addEventListener("submit", async (e) => {
       .upsert(
         {
           id: user.id,
-          nome: name,
+          name: name,
           telefone: phone,
           email: user.email,
         },
